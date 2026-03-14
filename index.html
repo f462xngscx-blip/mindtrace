@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>MindTrace</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+margin:0;
+font-family:Inter;
+background:linear-gradient(180deg,#f7fbff,#eaf6ff);
+color:#2c2c2c;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+font-family:Poppins;
+}
+
+.logo{
+font-size:24px;
+font-weight:700;
+}
+
+nav a{
+margin-left:25px;
+text-decoration:none;
+color:#333;
+font-weight:500;
+}
+
+.hero{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:90px;
+
+}
+
+.hero-text{
+max-width:500px;
+}
+
+.hero h1{
+font-family:Poppins;
+font-size:54px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:18px;
+opacity:0.8;
+}
+
+.button{
+
+background:#fff3a3;
+padding:15px 32px;
+border-radius:40px;
+display:inline-block;
+margin-top:20px;
+cursor:pointer;
+transition:0.3s;
+
+}
+
+.button:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.section-title{
+
+text-align:center;
+font-family:Poppins;
+font-size:38px;
+margin:70px 0 40px 0;
+
+}
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+padding:0 80px 60px;
+
+}
+
+.card{
+
+background:white;
+padding:35px;
+border-radius:25px;
+box-shadow:0 15px 35px rgba(0,0,0,0.05);
+transition:0.3s;
+
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.burnout{
+text-align:center;
+padding:60px;
+}
+
+.slider{
+width:300px;
+}
+
+.chat{
+
+max-width:520px;
+margin:auto;
+background:white;
+border-radius:25px;
+padding:30px;
+box-shadow:0 15px 35px rgba(0,0,0,0.05);
+
+}
+
+.messages{
+height:220px;
+overflow:auto;
+text-align:left;
+margin-bottom:20px;
+}
+
+input{
+padding:12px;
+border-radius:15px;
+border:1px solid #ddd;
+width:70%;
+}
+
+button{
+background:#fff3a3;
+border:none;
+padding:10px 18px;
+border-radius:15px;
+cursor:pointer;
+}
+
+footer{
+text-align:center;
+padding:40px;
+opacity:0.7;
+}
+
+.fade{
+
+opacity:0;
+transform:translateY(40px);
+transition:1s;
+
+}
+
+.fade.show{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">MindTrace</div>
+
+<div>
+<a href="#">Home</a>
+<a href="#analysis">Analysis</a>
+<a href="#chat">AI Chat</a>
+</div>
+
+</nav>
+
+<section class="hero fade">
+
+<div class="hero-text">
+
+<h1>AI Burnout Detection</h1>
+
+<p>
+MindTrace analyzes sleep, focus and mood to detect early signs of burnout.
+</p>
+
+<div class="button" onclick="scrollToTest()">Start Analysis</div>
+
+</div>
+
+<img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" width="320">
+
+</section>
+
+<h2 class="section-title fade">Features</h2>
+
+<section class="cards">
+
+<div class="card fade">
+<h3>Mood Tracking</h3>
+<p>Track emotional changes daily and understand your mental state.</p>
+</div>
+
+<div class="card fade">
+<h3>Burnout Prediction</h3>
+<p>AI model calculates burnout risk based on behavioral patterns.</p>
+</div>
+
+<div class="card fade">
+<h3>AI Support Chat</h3>
+<p>Talk to an AI assistant and receive emotional support.</p>
+</div>
+
+</section>
+
+<section class="burnout fade" id="analysis">
+
+<h2 class="section-title">Burnout Analysis</h2>
+
+<p>Sleep hours</p>
+<input type="range" min="0" max="12" value="7" id="sleep" class="slider">
+
+<p>Focus</p>
+<input type="range" min="0" max="10" value="6" id="focus" class="slider">
+
+<p>Screen time</p>
+<input type="range" min="0" max="10" value="5" id="screen" class="slider">
+
+<br><br>
+
+<button onclick="calculate()">Analyze</button>
+
+<h3 id="result"></h3>
+
+</section>
+
+<h2 class="section-title fade">AI Support Chat</h2>
+
+<section class="chat fade" id="chat">
+
+<div class="messages" id="messages"></div>
+
+<input id="msg" placeholder="Talk with AI...">
+
+<button onclick="send()">Send</button>
+
+</section>
+
+<footer>
+
+MindTrace • AI Mental Health Research Project
+
+</footer>
+
+<script>
+
+function scrollToTest(){
+document.getElementById("analysis").scrollIntoView({behavior:"smooth"})
+}
+
+function calculate(){
+
+let sleep=document.getElementById("sleep").value
+let focus=document.getElementById("focus").value
+let screen=document.getElementById("screen").value
+
+let sleepDeviation=Math.abs(8-sleep)/8
+let focusLoss=1-(focus/10)
+let digitalOverload=screen/10
+let recoveryDeficit=Math.max(0,(6-sleep)/6)
+
+let bri=
+0.25*sleepDeviation+
+0.25*focusLoss+
+0.25*digitalOverload+
+0.25*recoveryDeficit
+
+let percent=Math.round(bri*100)
+
+document.getElementById("result").innerText=
+"Estimated burnout risk: "+percent+"%"
+
+}
+
+function aiReply(text){
+
+text=text.toLowerCase()
+
+if(text.includes("stress")||text.includes("tired"))
+return "It sounds like you're overwhelmed. Try taking a small break."
+
+if(text.includes("sad"))
+return "I'm here with you. Talking about feelings can help."
+
+if(text.includes("happy"))
+return "That's wonderful to hear."
+
+return "Thank you for sharing. Your feelings matter."
+
+}
+
+function send(){
+
+let input=document.getElementById("msg")
+let messages=document.getElementById("messages")
+
+let user=input.value
+
+messages.innerHTML+="<p><b>You:</b> "+user+"</p>"
+
+let reply=aiReply(user)
+
+messages.innerHTML+="<p><b>AI:</b> "+reply+"</p>"
+
+input.value=""
+
+messages.scrollTop=messages.scrollHeight
+
+}
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
+document.querySelectorAll(".fade").forEach(el=>{
+observer.observe(el)
+})
+
+</script>
+
+</body>
+</html>
